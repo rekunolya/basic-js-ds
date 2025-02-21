@@ -7,33 +7,26 @@ const { Node } = require('../extensions/list-tree.js');
 * using Node from extensions
 */
 class BinarySearchTree {
-   node = null
+  constructor(){
+    this.rootNode = null;
+  }
 
   root() {
-    //throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
-    if(this.node !== null) {
-      return this.node
-    } else {
-      return null
-    }
-
-
+    if (this.rootNode !== null) return this.rootNode;
+    return null;
   }
 
   add(data ) {
-    //throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
     let newNode = new Node(data);
-    if(this.node === null){
-      this.node = newNode
+    if (this.rootNode === null) {
+      this.rootNode = newNode;
     } else {
-      this.addNode(this.node, newNode)
+      this.addNode(this.rootNode, newNode);
     }
   }
   addNode(node, newNode) {
-    if(newNode.data < node.data) {
-      if(node.left === null) {
+    if (newNode.data < node.data) {
+      if (node.left === null) {
         node.left = newNode
       } else {
         this.addNode(node.left, newNode)
@@ -48,47 +41,41 @@ class BinarySearchTree {
   }
 
   has(data) {
-     // node - текущий узел
-    // data - искомое значение
-    if(this.node === null) {
-      return false
-    } else if (data < this.node.data) {
-      return this.hasNode(this.node.left, data)
-    } else if (data > this.node.data) {
-      return this.hasNode(this.node.right, data)
+    if (this.rootNode === null) {
+      return false;
+    } else if (data < this.rootNode.data) {
+      return this.hasNode(this.rootNode.left, data);
+    } else if (data > this.rootNode.data) {
+      return this.hasNode(this.rootNode.right, data);
     } else {
-      return true
-    }
-  }
-  
-  hasNode(node, data){
-    if(node === null) {
-      return false
-    } else if (data < node.data) {
-      return this.hasNode(node.left, data)
-    } else if (data > node.data) {
-      return this.hasNode(node.right, data)
-    } else {
-      return true
+      return true;
     }
   }
 
+  hasNode(node, data) {
+    if (node === null) {
+      return false;
+    } else if (data < node.data) {
+      return this.hasNode(node.left, data);
+    } else if (data > node.data) {
+      return this.hasNode(node.right, data);
+    } else {
+      return true;
+    }
+  }
 
   find(data) {
-    // node - текущий узел
-    // data - искомое значение
-    if(this.node === null) {
-      return null
-    } else if (data < this.node.data) {
-      return this.findNode(this.node.left, data)
-    } else if (data > this.node.data) {
-      return this.findNode(this.node.right, data)
+    if (this.rootNode === null) {
+      return null;
+    } else if (data < this.rootNode.data) {
+      return this.findNode(this.rootNode.left, data);
+    } else if (data > this.rootNode.data) {
+      return this.findNode(this.rootNode.right, data);
     } else {
-      return this.node
+      return this.rootNode;
     }
   }
-
-  findNode(node, data){
+  findNode(node, data) {
     if(node === null) {
       return null
     } else if (data < node.data) {
@@ -96,35 +83,67 @@ class BinarySearchTree {
     } else if (data > node.data) {
       return this.findNode(node.right, data)
     } else {
-      return node
+      return node;
+    }
+  }
+  remove(data) {
+    this.rootNode = this.removeNode(this.rootNode, data);
+
+  }
+  removeNode(node, key) {
+    if (node === null) {
+      return null;
+    } else if (key > node.data) {
+      node.right = this.removeNode(node.right, key);
+      return node;
+    } else if (key < node.data) {
+      node.left = this.removeNode(node.left, key);
+      return node;
+    } else {
+      if (node.left === null && node.right === null) {
+        node = null;
+        return node;
+      } 
+      if (node.right === null) {
+        node = node.left;
+        return node;
+      } else if (node.left === null) {
+        node = node.right;
+        return node;
+      }
+      let temp = this.findMinNode(node.right);
+      node.data = temp.data;
+
+      node.right = this.removeNode(node.right, temp.data);
+      return node;
     }
   }
 
-
-  remove(data) {
-    //throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
-    
+  findMinNode(node) {
+    if (node.left === null) return node;
+    else return this.findMinNode(node.left);
   }
 
   min() {
-    //throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
-    let current = this.node
-    while (current.left !== null) {
-      current = current.left
+    let current = this.rootNode;
+    if (current.left === null) return current.data
+    else {
+      while (current.left !== null) {
+        current = current.left;
+      }
     }
-    return current.data
+    return current.data;
   }
 
   max() {
-    //throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
-    let current = this.node
-    while (current.right !== null) {
-      current = current.right
+    let current = this.rootNode;
+    if (current.right === null) return current.data
+    else {
+      while (current.right !== null) {
+        current = current.right;
+      }
     }
-    return current.data
+    return current.data;
   }
 }
 
